@@ -41,6 +41,7 @@
 #include "fsl_pit_hal.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 /*==================[macros and definitions]=================================*/
 #define EJE_X	1
@@ -48,8 +49,8 @@
 #define EJE_Z	3
 
 /*==================[internal data declaration]==============================*/
-int choice = EJE_Z;
-int16_t TEST_ACC = false;
+int8_t choice = EJE_Z;
+bool flagTestAcc = false;
 
 /*==================[internal functions declaration]=========================*/
 void UART_Init(void);
@@ -106,7 +107,7 @@ int main(void)
 
     while(true)
     {
-    	if(TEST_ACC == true)
+    	if(flagTestAcc == true)
     	{
 			switch(choice)
 			{
@@ -127,7 +128,7 @@ int main(void)
 			LPSCI_HAL_SendDataPolling(UART0, (uint8_t *)"         \r",10);
 			LPSCI_HAL_SendDataPolling(UART0, (uint8_t *)Buffer,strlen(Buffer));
     	}
-    	TEST_ACC = false;
+    	flagTestAcc = false;
    }
 }
 
@@ -155,7 +156,7 @@ void UART0_IRQHandler(void)
 void PIT_IRQHandler(void)
 {
 	PIT_HAL_ClearIntFlag(PIT, 1);
-	TEST_ACC = true;
+	flagTestAcc = true;
 }
 
 /*==================[end of file]============================================*/
